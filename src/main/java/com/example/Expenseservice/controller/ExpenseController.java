@@ -22,6 +22,15 @@ public class ExpenseController
         this.expenseService = expenseService;
     }
 
+    @GetMapping(path = "/test")
+    public ResponseEntity<String> testApi(){
+        try{
+            return new ResponseEntity<>("Expense service working fine", HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping(path = "/getExpense")
     public ResponseEntity<List<ExpenseDto>> getExpense(@RequestParam(value = "user_id") @NonNull String userId){
         try{
@@ -33,7 +42,7 @@ public class ExpenseController
     }
 
     @PostMapping(path="/addExpense")
-    public ResponseEntity<Boolean> addExpenses(@RequestHeader(value = "X-User-Id") @NonNull String userId, ExpenseDto expenseDto){
+    public ResponseEntity<Boolean> addExpenses(@RequestHeader(value = "X-User-Id") @NonNull String userId,@RequestBody ExpenseDto expenseDto){
         try{
             expenseDto.setUserId(userId);
             return new ResponseEntity<>(expenseService.createExpense(expenseDto), HttpStatus.OK);
